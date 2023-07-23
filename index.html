@@ -1,22 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Modify SVG with JS</title>
-    <style>
-        .animate-line {
-            transition: stroke-dashoffset 2s ease;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-        }
-    </style>
-</head>
-<body>
-    <svg width="500" height="500" id="my-svg">
-        <line id="l1" x1="10" y1="50" x2="90" y2="50" stroke="black" stroke-width="2" />
-    </svg>
-    <button id="modify-btn">Change Orientation</button>
-    <button id="add-line-btn">Add Line</button>
+<html lang="en">
 
-    <script src="index.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Encoding Waves</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="heading">Line Encoding Waves</h1>
+        <div class="lines">
+            <p>Line encoding is the process of converting digital data into analog signals suitable for transmission
+                over communication channels. </p>
+            <p>We will be generating waveforms for Unipolar NRZ, Polar NRZ-L, Polar NRZ-I, Polar RZ, Manchester,
+                Differential Manchester, AMI, and Pseudoternary line encoding techniques.</p>
+        </div>
+        <div class="input-button-container">
+            <input type="text" class="input-box" placeholder="Enter Digital Bit Sequence...">
+            <button class="generate-btn">Generate</button>
+        </div>
+
+        <div id="output-container">
+            <div>Wave form are as follows</div>
+            <div id="input-bits"></div>
+            <div id="unipolar-nrz">
+                This is Unipolar NRZ Line wave
+                <svg width="100%" id="unipolar-nrz-svg">
+                </svg>
+            </div>
+            <div id="polar-nrz-l">
+                <svg width="100%" height="100%" id="unipolar-nrz-l-svg">
+                </svg>
+            </div>
+            <div id="polar-nrz-i"></div>
+            <div id="polar-rz"></div>
+            <div id="manchester"></div>
+            <div id="diff-manchester"></div>
+            <div id="ami"></div>
+            <div id="pseudoternary"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
