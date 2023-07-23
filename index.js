@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const svg = document.getElementById("my-svg");
         const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
-        // Generate random coordinates for the new line within the range [10, 450] for x and [10, 450] for y
+        // Generate random coordinates for the new line within the range [10, 550] for x and [10, 550] for y
         const x1 = Math.floor(Math.random() * 441) + 10;
         const y1 = Math.floor(Math.random() * 441) + 10;
         const x2 = Math.floor(Math.random() * 441) + 10;
@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
         newLine.setAttribute("y2", y2);
         newLine.setAttribute("stroke", "blue");
         newLine.setAttribute("stroke-width", "2");
+        newLine.classList.add("animate-line"); // Add the class for animation
         svg.appendChild(newLine);
+
+        // Trigger the animation by resetting the dash offset
+        requestAnimationFrame(() => {
+            newLine.style.strokeDashoffset = "0";
+        });
     }
 });

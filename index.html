@@ -2,11 +2,17 @@
 <html>
 <head>
     <title>Modify SVG with JS</title>
+    <style>
+        .animate-line {
+            transition: stroke-dashoffset 2s ease;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+    </style>
 </head>
 <body>
     <svg width="500" height="500" id="my-svg">
         <line id="l1" x1="10" y1="50" x2="90" y2="50" stroke="black" stroke-width="2" />
-        <!-- <line x1="10" y1="50" x2="90" y2="50" stroke="black" stroke-width="2" /> -->
     </svg>
     <button id="modify-btn">Change Orientation</button>
     <button id="add-line-btn">Add Line</button>
