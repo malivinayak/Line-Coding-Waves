@@ -44,11 +44,12 @@ function validateInput() {
     inputBitsDiv.textContent = `Input Bits: [${bitsArray.join(", ")}]`;
 
     drawUnipolarNRZ(bitsArray);
-    drawUnipolarNRZ_l(bitsArray);
+    drawPolarNRZ_l(bitsArray);
+    drawPolarNRZ_i(bitsArray);
 
 }
 
-function drawUnipolarNRZ(bitsArray) {
+async function drawUnipolarNRZ(bitsArray) {
     let id = 0;
 
     const svg = document.getElementById("unipolar-nrz-svg");
@@ -90,18 +91,13 @@ function drawUnipolarNRZ(bitsArray) {
         }
 
         // Create a line element and set its attributes
-        const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        setTimeout(() => {
-            drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
-        }, id = id + 2 * 100);
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
         const dottedX1 = x2;
         const dottedY1 = svgHeight - 90;
         const dottedX2 = x2;
         const dottedY2 = svgHeight - 10;
-        setTimeout(() => {
-            drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
-        }, id = id + 2 * 100);
+        drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
@@ -112,18 +108,17 @@ function drawUnipolarNRZ(bitsArray) {
                 verticalY1 = verticalY2;
                 verticalY2 = svgHeight - 80;
             }
-            setTimeout(() => {
-                drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
-            }, id = id + 2 * 100);
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
         }
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
     }
 }
 
 
-function drawUnipolarNRZ_l(bitsArray) {
+async function drawPolarNRZ_l(bitsArray) {
     let id = 0;
 
-    const svg = document.getElementById("unipolar-nrz-l-svg");
+    const svg = document.getElementById("polar-nrz-l-svg");
     svg.innerHTML = ""; // Clear any previous content in the SVG
 
     const svgWidth = svg.clientWidth - 2; // Get the width of the SVG element
@@ -161,18 +156,13 @@ function drawUnipolarNRZ_l(bitsArray) {
         }
 
         // Create a line element and set its attributes
-        const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        setTimeout(() => {
-            drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
-        }, id = id + 2 * 100);
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
         const dottedX1 = x2;
         const dottedY1 = svgHeight - 90;
         const dottedX2 = x2;
         const dottedY2 = svgHeight - 10;
-        setTimeout(() => {
-            drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
-        }, id = id + 2 * 100);
+        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
@@ -183,16 +173,14 @@ function drawUnipolarNRZ_l(bitsArray) {
                 verticalY1 = verticalY2;
                 verticalY2 = svgHeight - 80;
             }
-            setTimeout(() => {
-                drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
-            }, id = id + 2 * 100);
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
         }
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
     }
 }
 
-
 // Line Draw Animation's
-function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
+async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
     const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     bitLine.setAttribute("x1", x1);
     bitLine.setAttribute("y1", y1);
@@ -200,14 +188,12 @@ function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
     bitLine.setAttribute("y2", y1);
     bitLine.setAttribute("stroke", "#000");
     bitLine.setAttribute("stroke-width", "2");
-    bitLine.style.transition = "all 0.3s ease";
     svg.appendChild(bitLine);
 
     const duration = 400;
     let start = null;
-    let isAnimating = true; // Flag to check if we should continue animating
 
-    // Create an animation function for the horizontal line using requestAnimationFrame
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
     function animateHorizontalLine(timestamp) {
         if (!start) start = timestamp;
         const progress = timestamp - start;
@@ -217,17 +203,31 @@ function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
         bitLine.setAttribute("x2", newX2);
 
         // Continue the animation until the duration is reached
-        if (progress < duration && isAnimating) {
+        if (progress < duration) {
             requestAnimationFrame(animateHorizontalLine);
         } else {
             // If the animation is done, set the x2 coordinate to its final value
             bitLine.setAttribute("x2", x2);
         }
     }
-    requestAnimationFrame(animateHorizontalLine);
+
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
+    return new Promise((resolve) => {
+        function animationWrapper(timestamp) {
+            animateHorizontalLine(timestamp);
+            if (bitLine.getAttribute("x2") === String(x2)) {
+                // Animation is completed, resolve the Promise
+                resolve();
+            } else {
+                // Continue animating
+                requestAnimationFrame(animationWrapper);
+            }
+        }
+        requestAnimationFrame(animationWrapper);
+    });
 }
 
-function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
+async function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
     const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     verticalLine.setAttribute("x1", x1);
     verticalLine.setAttribute("y1", y1);
@@ -235,14 +235,12 @@ function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
     verticalLine.setAttribute("y2", y1); // Start the vertical line at the same point to create the draw effect
     verticalLine.setAttribute("stroke", "#000");
     verticalLine.setAttribute("stroke-width", "2");
-    verticalLine.style.transition = "all 0.3s ease";
     svg.appendChild(verticalLine);
 
     const duration = 400;
     let start = null;
-    let isAnimating = true; // Flag to check if we should continue animating
 
-    // Create an animation function for the vertical line using requestAnimationFrame
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
     function animateVerticalLine(timestamp) {
         if (!start) start = timestamp;
         const progress = timestamp - start;
@@ -252,17 +250,78 @@ function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
         verticalLine.setAttribute("y2", newY2);
 
         // Continue the animation until the duration is reached
-        if (progress < duration && isAnimating) {
+        if (progress < duration) {
             requestAnimationFrame(animateVerticalLine);
         } else {
             // If the animation is done, set the y2 coordinate to its final value
             verticalLine.setAttribute("y2", y2);
         }
     }
-    requestAnimationFrame(animateVerticalLine);
+
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
+    return new Promise((resolve) => {
+        function animationWrapper(timestamp) {
+            animateVerticalLine(timestamp);
+            if (verticalLine.getAttribute("y2") === String(y2)) {
+                // Animation is completed, resolve the Promise
+                resolve();
+            } else {
+                // Continue animating
+                requestAnimationFrame(animationWrapper);
+            }
+        }
+        requestAnimationFrame(animationWrapper);
+    });
 }
 
-function drawDottedLineWithTransition(svg, x1, y1, x2, y2) {
+async function waitForVerticalLine(svg, x1, y1, x2, y2) {
+    const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    verticalLine.setAttribute("x1", x1);
+    verticalLine.setAttribute("y1", y1);
+    verticalLine.setAttribute("x2", x1);
+    verticalLine.setAttribute("y2", y1); // Start the vertical line at the same point to create the draw effect
+    verticalLine.setAttribute("stroke", "transparent");
+    verticalLine.setAttribute("stroke-width", "2");
+    svg.appendChild(verticalLine);
+
+    const duration = 400;
+    let start = null;
+
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
+    function animateVerticalLine(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+
+        // Calculate the new y2 coordinate for the vertical line to create the draw effect
+        const newY2 = y1 + (progress / duration) * (y2 - y1);
+        verticalLine.setAttribute("y2", newY2);
+
+        // Continue the animation until the duration is reached
+        if (progress < duration) {
+            requestAnimationFrame(animateVerticalLine);
+        } else {
+            // If the animation is done, set the y2 coordinate to its final value
+            verticalLine.setAttribute("y2", y2);
+        }
+    }
+
+    // Wrap the requestAnimationFrame in a Promise to be able to use await
+    return new Promise((resolve) => {
+        function animationWrapper(timestamp) {
+            animateVerticalLine(timestamp);
+            if (verticalLine.getAttribute("y2") === String(y2)) {
+                // Animation is completed, resolve the Promise
+                resolve();
+            } else {
+                // Continue animating
+                requestAnimationFrame(animationWrapper);
+            }
+        }
+        requestAnimationFrame(animationWrapper);
+    });
+}
+
+async function drawDottedLineWithTransition(svg, x1, y1, x2, y2) {
     const dottedLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     dottedLine.setAttribute("x1", x1);
     dottedLine.setAttribute("y1", y1);

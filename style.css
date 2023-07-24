@@ -118,35 +118,50 @@ body {
 }
 
 #unipolar-nrz-svg {
-
+    display: flex;
+    flex-direction: column;
 }
 
 #polar-nrz-l {
     /* CSS for the polar-nrz-l div */
+    display: flex;
+    flex-direction: column;
 }
 
 #polar-nrz-i {
     /* CSS for the polar-nrz-i div */
+    display: flex;
+    flex-direction: column;
 }
 
 #polar-rz {
     /* CSS for the polar-rz div */
+    display: flex;
+    flex-direction: column;
 }
 
 #manchester {
     /* CSS for the manchester div */
+    display: flex;
+    flex-direction: column;
 }
 
 #diff-manchester {
     /* CSS for the diff-manchester div */
+    display: flex;
+    flex-direction: column;
 }
 
 #ami {
     /* CSS for the ami div */
+    display: flex;
+    flex-direction: column;
 }
 
 #pseudoternary {
     /* CSS for the pseudoternary div */
+    display: flex;
+    flex-direction: column;
 }
 
 .line-transition {
