@@ -179,6 +179,74 @@ async function drawPolarNRZ_l(bitsArray) {
     }
 }
 
+async function drawPolarNRZ_i(bitsArray) {
+    let id = 0;
+
+    const svg = document.getElementById("polar-nrz-i-svg");
+    svg.innerHTML = ""; // Clear any previous content in the SVG
+
+    const svgWidth = svg.clientWidth - 2; // Get the width of the SVG element
+    const svgHeight = svg.clientHeight; // Get the height of the SVG element
+
+    const bitWidth = svgWidth / bitsArray.length;
+
+    // Create a initial line element and set its attributes
+    if (bitsArray[0] === "0") {
+        const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        initalLine.setAttribute("x1", 2);
+        initalLine.setAttribute("y1", svgHeight - 20);
+        initalLine.setAttribute("x2", 2);
+        initalLine.setAttribute("y2", svgHeight - 80);
+        initalLine.setAttribute("stroke", "#000");
+        initalLine.setAttribute("stroke-width", "2");
+        initalLine.setAttribute("id", id++);
+        svg.appendChild(initalLine);
+    }
+
+    // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    let isActive = Boolean(false);
+    let y1 = svgHeight - 80;
+    let y2 = svgHeight - 80;
+    for (let i = 0; i < bitsArray.length; i++) {
+        const bitValue = bitsArray[i];
+
+        const x1 = i * bitWidth;
+        const x2 = (i + 1) * bitWidth;
+
+        if (bitValue === "1") {
+            isActive = !isActive;
+            if (isActive) {
+                y1 = svgHeight - 20;
+                y2 = svgHeight - 20;
+            } else {
+                y1 = svgHeight - 80;
+                y2 = svgHeight - 80;
+            }
+        }
+        // Create a line element and set its attributes
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+
+        const dottedX1 = x2;
+        const dottedY1 = svgHeight - 90;
+        const dottedX2 = x2;
+        const dottedY2 = svgHeight - 10;
+        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        if (bitsArray[i + 1] === "1" && i != bitsArray.length - 1) {
+            const verticalX1 = x2;
+            const verticalX2 = x2;
+            let verticalY1 = svgHeight - 20;
+            let verticalY2 = svgHeight - 80;
+            if (y1 == svgHeight - 80) {
+                verticalY1 = svgHeight - 80;
+                verticalY2 = svgHeight - 20;
+            }
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
+        }
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+    }
+}
+
 // Line Draw Animation's
 async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
     const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
