@@ -123,6 +123,7 @@ body {
     transform: scale(1.03); 
     transition: transform 1s ease;
 }
+
 #unipolar-nrz-svg {
     display: flex;
     flex-direction: column;
