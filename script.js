@@ -61,18 +61,30 @@ async function drawUnipolarNRZ(bitsArray) {
     const bitWidth = svgWidth / bitsArray.length;
 
     // Create a initial line element and set its attributes
+    const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    initalLine.setAttribute("x1", 1.5);
+    initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "1") {
-        const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        initalLine.setAttribute("x1", 2);
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("x2", 2);
+        initalLine.setAttribute("y1", svgHeight - 50);
         initalLine.setAttribute("y2", svgHeight - 80);
-        initalLine.setAttribute("stroke", "#000");
-        initalLine.setAttribute("stroke-width", "2");
-        initalLine.setAttribute("id", id++);
-        initalLine.style.transition = "all 0.3s ease";
-        svg.appendChild(initalLine);
+    } else {
+        initalLine.setAttribute("y1", svgHeight - 20);
+        initalLine.setAttribute("y2", svgHeight - 50);
     }
+    initalLine.setAttribute("stroke", "#000");
+    initalLine.setAttribute("stroke-width", "2");
+    initalLine.setAttribute("id", id++);
+    svg.appendChild(initalLine);
+
+    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    axis.setAttribute("x1", 0);
+    axis.setAttribute("x2", svgWidth);
+    axis.setAttribute("y1", svgHeight - 50);
+    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("stroke", "#aaa");
+    axis.setAttribute("stroke-width", "1");
+    axis.setAttribute("id", id++);
+    svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
     for (let i = 0; i < bitsArray.length; i++) {
@@ -114,7 +126,6 @@ async function drawUnipolarNRZ(bitsArray) {
     }
 }
 
-
 async function drawPolarNRZ_l(bitsArray) {
     let id = 0;
 
@@ -127,17 +138,31 @@ async function drawPolarNRZ_l(bitsArray) {
     const bitWidth = svgWidth / bitsArray.length;
 
     // Create a initial line element and set its attributes
+    // Create a initial line element and set its attributes
+    const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    initalLine.setAttribute("x1", 1.5);
+    initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "0") {
-        const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        initalLine.setAttribute("x1", 2);
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("x2", 2);
+        initalLine.setAttribute("y1", svgHeight - 50);
         initalLine.setAttribute("y2", svgHeight - 80);
-        initalLine.setAttribute("stroke", "#000");
-        initalLine.setAttribute("stroke-width", "2");
-        initalLine.setAttribute("id", id++);
-        svg.appendChild(initalLine);
+    } else {
+        initalLine.setAttribute("y1", svgHeight - 20);
+        initalLine.setAttribute("y2", svgHeight - 50);
     }
+    initalLine.setAttribute("stroke", "#000");
+    initalLine.setAttribute("stroke-width", "2");
+    initalLine.setAttribute("id", id++);
+    svg.appendChild(initalLine);
+
+    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    axis.setAttribute("x1", 0);
+    axis.setAttribute("x2", svgWidth);
+    axis.setAttribute("y1", svgHeight - 50);
+    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("stroke", "#aaa");
+    axis.setAttribute("stroke-width", "1");
+    axis.setAttribute("id", id++);
+    svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
     for (let i = 0; i < bitsArray.length; i++) {
@@ -191,17 +216,31 @@ async function drawPolarNRZ_i(bitsArray) {
     const bitWidth = svgWidth / bitsArray.length;
 
     // Create a initial line element and set its attributes
-    if (bitsArray[0] === "0") {
-        const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        initalLine.setAttribute("x1", 2);
+    // Create a initial line element and set its attributes
+    const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    initalLine.setAttribute("x1", 1.5);
+    initalLine.setAttribute("x2", 1.5);
+    if (bitsArray[0] === "1") {
         initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("x2", 2);
         initalLine.setAttribute("y2", svgHeight - 80);
-        initalLine.setAttribute("stroke", "#000");
-        initalLine.setAttribute("stroke-width", "2");
-        initalLine.setAttribute("id", id++);
-        svg.appendChild(initalLine);
+    } else {
+        initalLine.setAttribute("y1", svgHeight - 20);
+        initalLine.setAttribute("y2", svgHeight - 20);
     }
+    initalLine.setAttribute("stroke", "#000");
+    initalLine.setAttribute("stroke-width", "2");
+    initalLine.setAttribute("id", id++);
+    svg.appendChild(initalLine);
+
+    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    axis.setAttribute("x1", 0);
+    axis.setAttribute("x2", svgWidth);
+    axis.setAttribute("y1", svgHeight - 50);
+    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("stroke", "#aaa");
+    axis.setAttribute("stroke-width", "1");
+    axis.setAttribute("id", id++);
+    svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
     let isActive = Boolean(false);
