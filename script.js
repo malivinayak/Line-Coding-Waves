@@ -46,8 +46,18 @@ function validateInput() {
     drawUnipolarNRZ(bitsArray);
     drawPolarNRZ_l(bitsArray);
     drawPolarNRZ_i(bitsArray);
+    drawPolarRZ(bitsArray);
 
 }
+
+// Wave Creation
+
+const axisHeight = 50;
+const waveHeight = 35;
+const upperLimit = axisHeight + waveHeight; 
+const lowerLimit = axisHeight - waveHeight; 
+const upperDottedLimit = axisHeight + (waveHeight + 12); 
+const lowerDottedLimit = axisHeight - (waveHeight + 12); 
 
 async function drawUnipolarNRZ(bitsArray) {
     let id = 0;
@@ -65,11 +75,11 @@ async function drawUnipolarNRZ(bitsArray) {
     initalLine.setAttribute("x1", 1.5);
     initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "1") {
-        initalLine.setAttribute("y1", svgHeight - 50);
-        initalLine.setAttribute("y2", svgHeight - 80);
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
+        initalLine.setAttribute("y2", svgHeight - upperLimit);
     } else {
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("y2", svgHeight - 50);
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - axisHeight);
     }
     initalLine.setAttribute("stroke", "#000");
     initalLine.setAttribute("stroke-width", "2");
@@ -79,8 +89,8 @@ async function drawUnipolarNRZ(bitsArray) {
     const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
     axis.setAttribute("x1", 0);
     axis.setAttribute("x2", svgWidth);
-    axis.setAttribute("y1", svgHeight - 50);
-    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("y1", svgHeight - axisHeight);
+    axis.setAttribute("y2", svgHeight - axisHeight);
     axis.setAttribute("stroke", "#aaa");
     axis.setAttribute("stroke-width", "1");
     axis.setAttribute("id", id++);
@@ -95,30 +105,30 @@ async function drawUnipolarNRZ(bitsArray) {
 
         let y1, y2;
         if (bitValue === "0") {
-            y1 = svgHeight - 20; // Set the y coordinate for bit value "0"
-            y2 = svgHeight - 20; // Set the y coordinate for bit value "0"
+            y1 = svgHeight - lowerLimit; // Set the y coordinate for bit value "0"
+            y2 = svgHeight - lowerLimit; // Set the y coordinate for bit value "0"
         } else {
-            y1 = svgHeight - 80; // Set the y coordinate for bit value "1"
-            y2 = svgHeight - 80; // Set the y coordinate for bit value "1"
+            y1 = svgHeight - upperLimit; // Set the y coordinate for bit value "1"
+            y2 = svgHeight - upperLimit; // Set the y coordinate for bit value "1"
         }
 
         // Create a line element and set its attributes
         await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
         const dottedX1 = x2;
-        const dottedY1 = svgHeight - 90;
+        const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
-        const dottedY2 = svgHeight - 10;
+        const dottedY2 = svgHeight - lowerDottedLimit;
         drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
             const verticalX2 = x2;
-            let verticalY1 = svgHeight - 80;
-            let verticalY2 = svgHeight - 20;
+            let verticalY1 = svgHeight - upperLimit;
+            let verticalY2 = svgHeight - lowerLimit;
             if (bitsArray[i] === "0") {
                 verticalY1 = verticalY2;
-                verticalY2 = svgHeight - 80;
+                verticalY2 = svgHeight - upperLimit;
             }
             await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
         }
@@ -143,11 +153,11 @@ async function drawPolarNRZ_l(bitsArray) {
     initalLine.setAttribute("x1", 1.5);
     initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "0") {
-        initalLine.setAttribute("y1", svgHeight - 50);
-        initalLine.setAttribute("y2", svgHeight - 80);
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
+        initalLine.setAttribute("y2", svgHeight - upperLimit);
     } else {
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("y2", svgHeight - 50);
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - axisHeight);
     }
     initalLine.setAttribute("stroke", "#000");
     initalLine.setAttribute("stroke-width", "2");
@@ -157,8 +167,8 @@ async function drawPolarNRZ_l(bitsArray) {
     const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
     axis.setAttribute("x1", 0);
     axis.setAttribute("x2", svgWidth);
-    axis.setAttribute("y1", svgHeight - 50);
-    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("y1", svgHeight - axisHeight);
+    axis.setAttribute("y2", svgHeight - axisHeight);
     axis.setAttribute("stroke", "#aaa");
     axis.setAttribute("stroke-width", "1");
     axis.setAttribute("id", id++);
@@ -173,30 +183,30 @@ async function drawPolarNRZ_l(bitsArray) {
 
         let y1, y2;
         if (bitValue === "1") {
-            y1 = svgHeight - 20; // Set the y coordinate for bit value "1"
-            y2 = svgHeight - 20; // Set the y coordinate for bit value "1"
+            y1 = svgHeight - lowerLimit; // Set the y coordinate for bit value "1"
+            y2 = svgHeight - lowerLimit; // Set the y coordinate for bit value "1"
         } else {
-            y1 = svgHeight - 80; // Set the y coordinate for bit value "0"
-            y2 = svgHeight - 80; // Set the y coordinate for bit value "0"
+            y1 = svgHeight - upperLimit; // Set the y coordinate for bit value "0"
+            y2 = svgHeight - upperLimit; // Set the y coordinate for bit value "0"
         }
 
         // Create a line element and set its attributes
         await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
         const dottedX1 = x2;
-        const dottedY1 = svgHeight - 90;
+        const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
-        const dottedY2 = svgHeight - 10;
+        const dottedY2 = svgHeight - lowerDottedLimit;
         await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
             const verticalX2 = x2;
-            let verticalY1 = svgHeight - 80;
-            let verticalY2 = svgHeight - 20;
+            let verticalY1 = svgHeight - upperLimit;
+            let verticalY2 = svgHeight - lowerLimit;
             if (bitsArray[i] === "1") {
                 verticalY1 = verticalY2;
-                verticalY2 = svgHeight - 80;
+                verticalY2 = svgHeight - upperLimit;
             }
             await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
         }
@@ -221,11 +231,11 @@ async function drawPolarNRZ_i(bitsArray) {
     initalLine.setAttribute("x1", 1.5);
     initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "1") {
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("y2", svgHeight - 80);
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - upperLimit);
     } else {
-        initalLine.setAttribute("y1", svgHeight - 20);
-        initalLine.setAttribute("y2", svgHeight - 20);
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - lowerLimit);
     }
     initalLine.setAttribute("stroke", "#000");
     initalLine.setAttribute("stroke-width", "2");
@@ -235,8 +245,8 @@ async function drawPolarNRZ_i(bitsArray) {
     const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
     axis.setAttribute("x1", 0);
     axis.setAttribute("x2", svgWidth);
-    axis.setAttribute("y1", svgHeight - 50);
-    axis.setAttribute("y2", svgHeight - 50);
+    axis.setAttribute("y1", svgHeight - axisHeight);
+    axis.setAttribute("y2", svgHeight - axisHeight);
     axis.setAttribute("stroke", "#aaa");
     axis.setAttribute("stroke-width", "1");
     axis.setAttribute("id", id++);
@@ -244,8 +254,8 @@ async function drawPolarNRZ_i(bitsArray) {
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
     let isActive = Boolean(false);
-    let y1 = svgHeight - 80;
-    let y2 = svgHeight - 80;
+    let y1 = svgHeight - upperLimit;
+    let y2 = svgHeight - upperLimit;
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
 
@@ -255,30 +265,111 @@ async function drawPolarNRZ_i(bitsArray) {
         if (bitValue === "1") {
             isActive = !isActive;
             if (isActive) {
-                y1 = svgHeight - 20;
-                y2 = svgHeight - 20;
+                y1 = svgHeight - lowerLimit;
+                y2 = svgHeight - lowerLimit;
             } else {
-                y1 = svgHeight - 80;
-                y2 = svgHeight - 80;
+                y1 = svgHeight - upperLimit;
+                y2 = svgHeight - upperLimit;
             }
         }
         // Create a line element and set its attributes
         await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
         const dottedX1 = x2;
-        const dottedY1 = svgHeight - 90;
+        const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
-        const dottedY2 = svgHeight - 10;
+        const dottedY2 = svgHeight - lowerDottedLimit;
         await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
         if (bitsArray[i + 1] === "1" && i != bitsArray.length - 1) {
             const verticalX1 = x2;
             const verticalX2 = x2;
-            let verticalY1 = svgHeight - 20;
-            let verticalY2 = svgHeight - 80;
-            if (y1 == svgHeight - 80) {
-                verticalY1 = svgHeight - 80;
-                verticalY2 = svgHeight - 20;
+            let verticalY1 = svgHeight - lowerLimit;
+            let verticalY2 = svgHeight - upperLimit;
+            if (y1 == svgHeight - upperLimit) {
+                verticalY1 = svgHeight - upperLimit;
+                verticalY2 = svgHeight - lowerLimit;
+            }
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
+        }
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+    }
+}
+
+async function drawPolarRZ(bitsArray) {
+    let id = 0;
+
+    const svg = document.getElementById("polar-rz-svg");
+    svg.innerHTML = ""; // Clear any previous content in the SVG
+
+    const svgWidth = svg.clientWidth - 2; // Get the width of the SVG element
+    const svgHeight = svg.clientHeight; // Get the height of the SVG element
+
+    const bitWidth = svgWidth / bitsArray.length;
+
+    // Create a initial line element and set its attributes
+    const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    initalLine.setAttribute("x1", 1.5);
+    initalLine.setAttribute("x2", 1.5);
+    if (bitsArray[0] === "1") {
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - upperLimit);
+    } else {
+        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y2", svgHeight - lowerLimit);
+    }
+    initalLine.setAttribute("stroke", "#000");
+    initalLine.setAttribute("stroke-width", "2");
+    initalLine.setAttribute("id", id++);
+    svg.appendChild(initalLine);
+
+    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    axis.setAttribute("x1", 0);
+    axis.setAttribute("x2", svgWidth);
+    axis.setAttribute("y1", svgHeight - axisHeight);
+    axis.setAttribute("y2", svgHeight - axisHeight);
+    axis.setAttribute("stroke", "#aaa");
+    axis.setAttribute("stroke-width", "1");
+    axis.setAttribute("id", id++);
+    svg.appendChild(axis);
+
+    // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    let isActive = Boolean(false);
+    let y1 = svgHeight - upperLimit;
+    let y2 = svgHeight - upperLimit;
+    for (let i = 0; i < bitsArray.length; i++) {
+        const bitValue = bitsArray[i];
+
+        const x1 = i * bitWidth;
+        const x2 = (i + 1) * bitWidth;
+
+        if (bitValue === "1") {
+            isActive = !isActive;
+            if (isActive) {
+                y1 = svgHeight - lowerLimit;
+                y2 = svgHeight - lowerLimit;
+            } else {
+                y1 = svgHeight - upperLimit;
+                y2 = svgHeight - upperLimit;
+            }
+        }
+        // Create a line element and set its attributes
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+
+        const dottedX1 = x2;
+        const dottedY1 = svgHeight - upperDottedLimit;
+        const dottedX2 = x2;
+        const dottedY2 = svgHeight - lowerDottedLimit;
+        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        if (bitsArray[i + 1] === "1" && i != bitsArray.length - 1) {
+            const verticalX1 = x2;
+            const verticalX2 = x2;
+            let verticalY1 = svgHeight - lowerLimit;
+            let verticalY2 = svgHeight - upperLimit;
+            if (y1 == svgHeight - upperLimit) {
+                verticalY1 = svgHeight - upperLimit;
+                verticalY2 = svgHeight - lowerLimit;
             }
             await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
         }
