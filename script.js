@@ -113,7 +113,7 @@ async function drawUnipolarNRZ(bitsArray) {
         }
 
         // Create a line element and set its attributes
-        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 500);
 
         const dottedX1 = x2;
         const dottedY1 = svgHeight - upperDottedLimit;
@@ -130,9 +130,9 @@ async function drawUnipolarNRZ(bitsArray) {
                 verticalY1 = verticalY2;
                 verticalY2 = svgHeight - upperLimit;
             }
-            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2, 500);
         }
-        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2, 500);
     }
 }
 
@@ -191,7 +191,7 @@ async function drawPolarNRZ_l(bitsArray) {
         }
 
         // Create a line element and set its attributes
-        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 500);
 
         const dottedX1 = x2;
         const dottedY1 = svgHeight - upperDottedLimit;
@@ -208,9 +208,9 @@ async function drawPolarNRZ_l(bitsArray) {
                 verticalY1 = verticalY2;
                 verticalY2 = svgHeight - upperLimit;
             }
-            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2, 500);
         }
-        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2, 500);
     }
 }
 
@@ -273,7 +273,7 @@ async function drawPolarNRZ_i(bitsArray) {
             }
         }
         // Create a line element and set its attributes
-        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 750);
 
         const dottedX1 = x2;
         const dottedY1 = svgHeight - upperDottedLimit;
@@ -290,9 +290,9 @@ async function drawPolarNRZ_i(bitsArray) {
                 verticalY1 = svgHeight - upperLimit;
                 verticalY2 = svgHeight - lowerLimit;
             }
-            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
+            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2, 250);
         }
-        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2, 250);
     }
 }
 
@@ -312,10 +312,10 @@ async function drawPolarRZ(bitsArray) {
     initalLine.setAttribute("x1", 1.5);
     initalLine.setAttribute("x2", 1.5);
     if (bitsArray[0] === "1") {
-        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
         initalLine.setAttribute("y2", svgHeight - upperLimit);
     } else {
-        initalLine.setAttribute("y1", svgHeight - lowerLimit);
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
         initalLine.setAttribute("y2", svgHeight - lowerLimit);
     }
     initalLine.setAttribute("stroke", "#000");
@@ -341,44 +341,30 @@ async function drawPolarRZ(bitsArray) {
     let pulseWidth = bitWidth / 2;
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
-        if (i > 0) {
-            if (bitValue === "0") {
-                x1 = i * bitWidth;
-                y1 = svgHeight - axisHeight;
-                y2 = svgHeight - lowerLimit;
-                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2);
-            } else {
-                x1 = i * bitWidth;
-                y1 = svgHeight - axisHeight;
-                y2 = svgHeight - upperLimit;
-                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2);
-            }
-        }
         if (bitValue === "1") {
             x1 = i * bitWidth;
             x2 = x1 + pulseWidth;
             y1 = svgHeight - upperLimit;
             y2 = svgHeight - upperLimit;
-            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
             y2 = svgHeight - axisHeight;
-            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2);
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2, 250);
             x1 = x2;
             x2 = x1 + pulseWidth;
             y1 = svgHeight - axisHeight;
-            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
         } else {
             x1 = i * bitWidth;
             x2 = x1 + pulseWidth;
             y1 = svgHeight - lowerLimit;
             y2 = svgHeight - lowerLimit;
-            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
             y2 = svgHeight - axisHeight;
-            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2);
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2, 250);
             x1 = x2;
             x2 = x1 + pulseWidth;
             y1 = svgHeight - axisHeight;
-            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
-
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
         }
 
         const dottedX1 = (i + 1) * bitWidth;
@@ -386,12 +372,25 @@ async function drawPolarRZ(bitsArray) {
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
         await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
-
+        
+        if (i !== bitsArray.length-1) {
+            if (bitsArray[i+1] === "0") {
+                x1 = (i+1) * bitWidth;
+                y1 = svgHeight - axisHeight;
+                y2 = svgHeight - lowerLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
+            } else {
+                x1 = (i+1) * bitWidth;
+                y1 = svgHeight - axisHeight;
+                y2 = svgHeight - upperLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
+            }
+        } 
     }
 }
 
 // Line Draw Animation's
-async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
+async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, duration) {
     const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     bitLine.setAttribute("x1", x1);
     bitLine.setAttribute("y1", y1);
@@ -401,7 +400,6 @@ async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
     bitLine.setAttribute("stroke-width", "2");
     svg.appendChild(bitLine);
 
-    const duration = 400;
     let start = null;
 
     // Wrap the requestAnimationFrame in a Promise to be able to use await
@@ -438,7 +436,7 @@ async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2) {
     });
 }
 
-async function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
+async function drawVerticalLineWithTransition(svg, x1, y1, x2, y2, duration) {
     const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     verticalLine.setAttribute("x1", x1);
     verticalLine.setAttribute("y1", y1);
@@ -448,7 +446,6 @@ async function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
     verticalLine.setAttribute("stroke-width", "2");
     svg.appendChild(verticalLine);
 
-    const duration = 400;
     let start = null;
 
     // Wrap the requestAnimationFrame in a Promise to be able to use await
@@ -485,7 +482,7 @@ async function drawVerticalLineWithTransition(svg, x1, y1, x2, y2) {
     });
 }
 
-async function waitForVerticalLine(svg, x1, y1, x2, y2) {
+async function waitForVerticalLine(svg, x1, y1, x2, y2, duration) {
     const verticalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     verticalLine.setAttribute("x1", x1);
     verticalLine.setAttribute("y1", y1);
@@ -495,7 +492,6 @@ async function waitForVerticalLine(svg, x1, y1, x2, y2) {
     verticalLine.setAttribute("stroke-width", "2");
     svg.appendChild(verticalLine);
 
-    const duration = 400;
     let start = null;
 
     // Wrap the requestAnimationFrame in a Promise to be able to use await
