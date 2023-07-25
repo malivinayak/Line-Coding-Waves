@@ -54,10 +54,10 @@ function validateInput() {
 
 const axisHeight = 50;
 const waveHeight = 35;
-const upperLimit = axisHeight + waveHeight; 
-const lowerLimit = axisHeight - waveHeight; 
-const upperDottedLimit = axisHeight + (waveHeight + 12); 
-const lowerDottedLimit = axisHeight - (waveHeight + 12); 
+const upperLimit = axisHeight + waveHeight;
+const lowerLimit = axisHeight - waveHeight;
+const upperDottedLimit = axisHeight + (waveHeight + 12);
+const lowerDottedLimit = axisHeight - (waveHeight + 12);
 
 async function drawUnipolarNRZ(bitsArray) {
     let id = 0;
@@ -334,46 +334,59 @@ async function drawPolarRZ(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
-    let isActive = Boolean(false);
-    let y1 = svgHeight - upperLimit;
-    let y2 = svgHeight - upperLimit;
+    let y1 = svgHeight;
+    let y2 = svgHeight;
+    let x1 = bitWidth;
+    let x2 = 2 * bitWidth;
+    let pulseWidth = bitWidth / 2;
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
-
-        const x1 = i * bitWidth;
-        const x2 = (i + 1) * bitWidth;
-
-        if (bitValue === "1") {
-            isActive = !isActive;
-            if (isActive) {
-                y1 = svgHeight - lowerLimit;
+        if (i > 0) {
+            if (bitValue === "0") {
+                x1 = i * bitWidth;
+                y1 = svgHeight - axisHeight;
                 y2 = svgHeight - lowerLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2);
             } else {
-                y1 = svgHeight - upperLimit;
+                x1 = i * bitWidth;
+                y1 = svgHeight - axisHeight;
                 y2 = svgHeight - upperLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2);
             }
         }
-        // Create a line element and set its attributes
-        await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+        if (bitValue === "1") {
+            x1 = i * bitWidth;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - upperLimit;
+            y2 = svgHeight - upperLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+            y2 = svgHeight - axisHeight;
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2);
+            x1 = x2;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - axisHeight;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+        } else {
+            x1 = i * bitWidth;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - lowerLimit;
+            y2 = svgHeight - lowerLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
+            y2 = svgHeight - axisHeight;
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2);
+            x1 = x2;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - axisHeight;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2);
 
-        const dottedX1 = x2;
+        }
+
+        const dottedX1 = (i + 1) * bitWidth;
         const dottedY1 = svgHeight - upperDottedLimit;
-        const dottedX2 = x2;
+        const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
         await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
 
-        if (bitsArray[i + 1] === "1" && i != bitsArray.length - 1) {
-            const verticalX1 = x2;
-            const verticalX2 = x2;
-            let verticalY1 = svgHeight - lowerLimit;
-            let verticalY2 = svgHeight - upperLimit;
-            if (y1 == svgHeight - upperLimit) {
-                verticalY1 = svgHeight - upperLimit;
-                verticalY2 = svgHeight - lowerLimit;
-            }
-            await drawVerticalLineWithTransition(svg, verticalX1, verticalY1, verticalX2, verticalY2);
-        }
-        else await waitForVerticalLine(svg, dottedX1, dottedY1, dottedX2, dottedY2);
     }
 }
 
