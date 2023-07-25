@@ -120,10 +120,9 @@ body {
 }
 
 #unipolar-nrz:hover {
-    transform: scale(1.03); 
+    transform: scale(1.01); 
     transition: transform 1s ease;
 }
-
 #unipolar-nrz-svg {
     display: flex;
     flex-direction: column;
