@@ -56,12 +56,13 @@ function validateInput() {
 
 // Wave Creation
 
-const axisHeight = 50;
+const axisHeight = 75;
 const waveHeight = 35;
 const upperLimit = axisHeight + waveHeight;
 const lowerLimit = axisHeight - waveHeight;
 const upperDottedLimit = axisHeight + (waveHeight + 12);
 const lowerDottedLimit = axisHeight - (waveHeight + 12);
+const bitHeight = lowerLimit - 30;
 
 async function drawUnipolarNRZ(bitsArray) {
     let id = 0;
@@ -100,6 +101,7 @@ async function drawUnipolarNRZ(bitsArray) {
     axis.setAttribute("id", id++);
     svg.appendChild(axis);
 
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
@@ -123,7 +125,12 @@ async function drawUnipolarNRZ(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await animationDelay();
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
@@ -179,6 +186,7 @@ async function drawPolarNRZ_l(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
 
@@ -201,7 +209,11 @@ async function drawPolarNRZ_l(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         if (bitsArray[i] != bitsArray[i + 1] && i !== bitsArray.length - 1) {
             const verticalX1 = x2;
@@ -256,6 +268,7 @@ async function drawPolarNRZ_i(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let isActive = Boolean(false);
     let y1 = svgHeight - upperLimit;
     let y2 = svgHeight - upperLimit;
@@ -282,7 +295,11 @@ async function drawPolarNRZ_i(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = x2;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         if (bitsArray[i + 1] === "1" && i != bitsArray.length - 1) {
             const verticalX1 = x2;
@@ -337,6 +354,7 @@ async function drawPolarRZ(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let y1 = svgHeight;
     let y2 = svgHeight;
     let x1 = bitWidth;
@@ -374,7 +392,11 @@ async function drawPolarRZ(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         if (i !== bitsArray.length - 1) {
             if (bitsArray[i + 1] === "0") {
@@ -430,6 +452,7 @@ async function drawManchester(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let y1 = svgHeight;
     let y2 = svgHeight;
     let x1 = bitWidth;
@@ -467,7 +490,11 @@ async function drawManchester(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         x1 = i * bitWidth;
         y1 = svgHeight - lowerLimit;
@@ -529,6 +556,7 @@ async function drawDiffManchester(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let isActive = Boolean(true);
     let y1 = svgHeight;
     let y2 = svgHeight;
@@ -571,7 +599,11 @@ async function drawDiffManchester(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         x1 = i * bitWidth;
         if (bitsArray[i + 1] === "0" && i != bitsArray.length - 1) {
@@ -628,6 +660,7 @@ async function drawAMI(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let isActive = Boolean(false);
     let y1 = svgHeight;
     let y2 = svgHeight;
@@ -659,7 +692,11 @@ async function drawAMI(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         const verticalX1 = x2;
         const verticalX2 = x2;
@@ -737,12 +774,12 @@ async function drawPseudoternary(bitsArray) {
     svg.appendChild(axis);
 
     // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    await displayNextBit(svg, bitWidth / 2, svgHeight - bitHeight, bitsArray[0])
     let isActive = Boolean(false);
     let y1 = svgHeight;
     let y2 = svgHeight;
     let x1 = bitWidth;
     let x2 = 2 * bitWidth;
-    let pulseWidth = bitWidth / 2;
     for (let i = 0; i < bitsArray.length; i++) {
         const bitValue = bitsArray[i];
 
@@ -768,7 +805,11 @@ async function drawPseudoternary(bitsArray) {
         const dottedY1 = svgHeight - upperDottedLimit;
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
-        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+        await await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        // Display Next bitValue 
+        if (i !== bitsArray.length - 1)
+            await displayNextBit(svg, x2 + bitWidth / 2, svgHeight - bitHeight, bitsArray[i + 1])
 
         const verticalX1 = x2;
         const verticalX2 = x2;
@@ -807,6 +848,7 @@ async function drawPseudoternary(bitsArray) {
 
     }
 }
+
 // Line Draw Animation's
 async function drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, duration) {
     const bitLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -950,11 +992,55 @@ async function drawDottedLineWithTransition(svg, x1, y1, x2, y2) {
     const dottedLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     dottedLine.setAttribute("x1", x1);
     dottedLine.setAttribute("y1", y1);
-    dottedLine.setAttribute("x2", x2);
-    dottedLine.setAttribute("y2", y2);
+    dottedLine.setAttribute("x2", x1);
+    dottedLine.setAttribute("y2", y1);
     dottedLine.setAttribute("stroke", "#000");
     dottedLine.setAttribute("stroke-width", "1");
     dottedLine.setAttribute("stroke-dasharray", "4, 4");
-    dottedLine.style.transition = "all 0.3s ease";
     svg.appendChild(dottedLine);
+
+    const duration = 200;
+    let start = null;
+
+    function animateDottedLine(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+
+        const newY2 = y1 + (progress / duration) * (y2 - y1);
+        dottedLine.setAttribute("y2", newY2);
+
+        if (progress < duration) {
+            requestAnimationFrame(animateDottedLine);
+        } else {
+            dottedLine.setAttribute("y2", y2);
+        }
+    }
+    return new Promise((resolve) => {
+        function animationWrapper(timestamp) {
+            animateDottedLine(timestamp);
+            if (dottedLine.getAttribute("y2") === String(y2)) {
+                resolve();
+            } else {
+                requestAnimationFrame(animationWrapper);
+            }
+        }
+        requestAnimationFrame(animationWrapper);
+    });
+}
+
+async function displayNextBit(svg, x, y, bitValue) {
+    await animationDelay(200);
+    const bitValueText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    bitValueText.setAttribute("x", x);
+    bitValueText.setAttribute("y", y); // Adjust the value as needed for positioning
+    bitValueText.setAttribute("text-anchor", "middle");
+    bitValueText.setAttribute("fill", "#000");
+    bitValueText.textContent = bitValue;
+    svg.appendChild(bitValueText);
+
+    await animationDelay(400);
+}
+
+async function animationDelay(delay) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
 }
