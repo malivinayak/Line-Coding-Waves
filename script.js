@@ -47,6 +47,7 @@ function validateInput() {
     drawPolarNRZ_l(bitsArray);
     drawPolarNRZ_i(bitsArray);
     drawPolarRZ(bitsArray);
+    drawManchester(bitsArray);
 
 }
 
@@ -372,20 +373,119 @@ async function drawPolarRZ(bitsArray) {
         const dottedX2 = (i + 1) * bitWidth;
         const dottedY2 = svgHeight - lowerDottedLimit;
         await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
-        
-        if (i !== bitsArray.length-1) {
-            if (bitsArray[i+1] === "0") {
-                x1 = (i+1) * bitWidth;
+
+        if (i !== bitsArray.length - 1) {
+            if (bitsArray[i + 1] === "0") {
+                x1 = (i + 1) * bitWidth;
                 y1 = svgHeight - axisHeight;
                 y2 = svgHeight - lowerLimit;
                 await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
             } else {
-                x1 = (i+1) * bitWidth;
+                x1 = (i + 1) * bitWidth;
                 y1 = svgHeight - axisHeight;
                 y2 = svgHeight - upperLimit;
                 await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
             }
-        } 
+        }
+    }
+}
+
+async function drawManchester(bitsArray) {
+    let id = 0;
+
+    const svg = document.getElementById("manchester-svg");
+    svg.innerHTML = ""; // Clear any previous content in the SVG
+
+    const svgWidth = svg.clientWidth - 2; // Get the width of the SVG element
+    const svgHeight = svg.clientHeight; // Get the height of the SVG element
+
+    const bitWidth = svgWidth / bitsArray.length;
+
+    // Create a initial line element and set its attributes
+    const initalLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    initalLine.setAttribute("x1", 1.5);
+    initalLine.setAttribute("x2", 1.5);
+    if (bitsArray[0] === "0") {
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
+        initalLine.setAttribute("y2", svgHeight - upperLimit);
+    } else {
+        initalLine.setAttribute("y1", svgHeight - axisHeight);
+        initalLine.setAttribute("y2", svgHeight - lowerLimit);
+    }
+    initalLine.setAttribute("stroke", "#000");
+    initalLine.setAttribute("stroke-width", "2");
+    initalLine.setAttribute("id", id++);
+    svg.appendChild(initalLine);
+
+    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    axis.setAttribute("x1", 0);
+    axis.setAttribute("x2", svgWidth);
+    axis.setAttribute("y1", svgHeight - axisHeight);
+    axis.setAttribute("y2", svgHeight - axisHeight);
+    axis.setAttribute("stroke", "#aaa");
+    axis.setAttribute("stroke-width", "1");
+    axis.setAttribute("id", id++);
+    svg.appendChild(axis);
+
+    // Loop through the bitsArray and draw lines based on the bit values (0 or 1)
+    let y1 = svgHeight;
+    let y2 = svgHeight;
+    let x1 = bitWidth;
+    let x2 = 2 * bitWidth;
+    let pulseWidth = bitWidth / 2;
+    for (let i = 0; i < bitsArray.length; i++) {
+        const bitValue = bitsArray[i];
+        if (bitValue === "0") {
+            x1 = i * bitWidth;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - upperLimit;
+            y2 = svgHeight - upperLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
+            y2 = svgHeight - lowerLimit;
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2, 250);
+            x1 = x2;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - lowerLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
+        } else {
+            x1 = i * bitWidth;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - lowerLimit;
+            y2 = svgHeight - lowerLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
+            y2 = svgHeight - upperLimit;
+            await drawVerticalLineWithTransition(svg, x2, y1, x2, y2, 250);
+            x1 = x2;
+            x2 = x1 + pulseWidth;
+            y1 = svgHeight - upperLimit;
+            await drawHorizontalLineWithTransition(svg, x1, y1, x2, y2, 250);
+        }
+
+        const dottedX1 = (i + 1) * bitWidth;
+        const dottedY1 = svgHeight - upperDottedLimit;
+        const dottedX2 = (i + 1) * bitWidth;
+        const dottedY2 = svgHeight - lowerDottedLimit;
+        await drawDottedLineWithTransition(svg, dottedX1, dottedY1, dottedX2, dottedY2);
+
+        x1 = i * bitWidth;
+        y1 = svgHeight - lowerLimit;
+        y2 = svgHeight - upperLimit;
+        if (i !== bitsArray.length - 1 && bitsArray[i] === bitsArray[i + 1]) {
+            if (bitsArray[i + 1] === "0") {
+                x1 = (i + 1) * bitWidth;
+                y1 = svgHeight - lowerLimit;
+                y2 = svgHeight - upperLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
+            } else {
+                x1 = (i + 1) * bitWidth;
+                y1 = svgHeight - upperLimit;
+                y2 = svgHeight - lowerLimit;
+                await drawVerticalLineWithTransition(svg, x1, y1, x1, y2, 200);
+            }
+        }
+        else {
+            await waitForVerticalLine(svg, x1, y1, x1, y2, 200)
+        }
     }
 }
 
