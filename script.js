@@ -41,8 +41,8 @@ function validateInput() {
     outputContainer.style.display = "block"; // Make the output container visible
 
     // Update the content of individual divs as needed
-    const inputBitsDiv = document.getElementById("input-bits");
-    inputBitsDiv.textContent = `Input Bits: [${bitsArray.join(", ")}]`;
+    // const inputBitsDiv = document.getElementById("input-bits");
+    // inputBitsDiv.textContent = `Input Bits: [${bitsArray.join(", ")}]`;
 
     drawUnipolarNRZ(bitsArray);
     drawPolarNRZ_l(bitsArray);

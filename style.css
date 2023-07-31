@@ -106,10 +106,10 @@ body {
 }
 
 /* Add additional styling for individual divs if needed */
-#input-bits {
+/* #input-bits {
     color: rgb(68, 194, 51) !important;
     max-height: 10px !important;
-}
+} */
 
 #unipolar-nrz {
     /* CSS for the unipolar-nrz div */
