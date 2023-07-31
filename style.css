@@ -5,8 +5,81 @@ body {
     background: linear-gradient(to bottom, #2196F3, #64B5F6, #90CAF9, #BBDEFB);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    border-radius: 4px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+}
+
+.navbar-logo img {
+    height: 30px;
+    width: 30px;
+}
+
+.navbar-links ul {
+    list-style: none;
+}
+
+.navbar-links li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.navbar-links li:last-child {
+    margin-right: 0;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 8px 0;
+    display: none;
+}
+
+.dropdown-content li {
+    display: block;
+    margin: 0;
+    padding: 5px 20px;
+}
+
+.dropdown-content li a {
+    color: #333;
+    text-decoration: none;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+.github-icon {
+    width: 20px;
+    height: 20px;
+    fill: #000;
+    margin-left: 5px;
 }
 
 .container {
@@ -76,7 +149,8 @@ body {
 
 /* CSS for the output container and its child divs */
 #output-container {
-    display: none;    /* Initially hidden */
+    display: none;
+    /* Initially hidden */
     margin-top: 20px;
 }
 
@@ -86,10 +160,13 @@ body {
     background-color: #fafafa;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.1), /* Top shadow */
-        0 4px 8px rgba(0, 0, 0, 0.1), /* Middle shadow */
-        0 8px 16px rgba(0, 0, 0, 0.1); /* Bottom shadow */
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        /* Top shadow */
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        /* Middle shadow */
+        0 8px 16px rgba(0, 0, 0, 0.1);
+    /* Bottom shadow */
 }
 
 
@@ -165,7 +242,8 @@ body {
 }
 
 .line-transition {
-    transition: all 2s ease; /* transition duration and timing function */
+    transition: all 2s ease;
+    /* transition duration and timing function */
 }
 
 /* Media Query for Smaller Devices */
