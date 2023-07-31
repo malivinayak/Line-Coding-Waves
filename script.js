@@ -29,7 +29,8 @@ function validateInput() {
     const validInputRegex = /^[01]+$/;
 
     if (!validInputRegex.test(inputText)) {
-        alert("Please enter only 0's and 1's in the input box.");
+        alert("Please enter only 0's and 1's in the input box.\nSample Input is updated in input box");
+        inputBox.value = "10010110";
         return;
     }
 
