@@ -16,6 +16,42 @@ document.addEventListener("DOMContentLoaded", function () {
         // Use setTimeout to allow the input value to update after the paste event
         setTimeout(validateInput, 0);
     });
+
+    var linksWithDropdown = document.querySelectorAll('nav ul li a:not(:only-child)');
+  linksWithDropdown.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var siblingDropdown = this.nextElementSibling;
+      siblingDropdown.style.display = siblingDropdown.style.display === 'block' ? 'none' : 'block';
+
+      // Close one dropdown when selecting another
+      var otherDropdowns = document.querySelectorAll('.nav-dropdown:not(' + siblingDropdown.tagName + ')');
+      otherDropdowns.forEach(function (dropdown) {
+        dropdown.style.display = 'none';
+      });
+
+      e.stopPropagation();
+    });
+  });
+
+  // Clicking away from dropdown will remove the dropdown class
+  document.addEventListener('click', function () {
+    var dropdowns = document.querySelectorAll('.nav-dropdown');
+    dropdowns.forEach(function (dropdown) {
+      dropdown.style.display = 'none';
+    });
+  });
+
+  // Toggle open and close nav styles on click
+  var navToggle = document.getElementById('nav-toggle');
+  navToggle.addEventListener('click', function () {
+    var navUl = document.querySelector('nav ul');
+    navUl.style.display = navUl.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Hamburger to X toggle
+  navToggle.addEventListener('click', function () {
+    this.classList.toggle('active');
+  });
 });
 
 function validateInput() {
